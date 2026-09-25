@@ -155,6 +155,14 @@
       <b>Z / Ctrl</b> Rotate CCW<br>
       <b>Space</b> Hard drop<br>
       <b>P</b> Pause &middot; <b>R</b> Restart
+      <!-- Mobile touch controls -->
+      <div id="touch-controls" style="display:none; position:absolute; bottom:10px; left:50%; transform:translateX(-50%); z-index:10;">
+        <button id="btn-left" style="margin:5px;">←</button>
+        <button id="btn-rotate" style="margin:5px;">↑</button>
+        <button id="btn-right" style="margin:5px;">→</button>
+        <button id="btn-down" style="margin:5px;">↓</button>
+        <button id="btn-drop" style="margin:5px;">⇩</button>
+      </div>
     </div>
   </div>
 </div>
@@ -580,6 +588,33 @@ restartBtn.addEventListener('click', () => {
 window.addEventListener('blur', () => {
   if (state === 'playing') togglePause();
 });
+
+// ---------- Mobile touch controls ----------
+function initTouchControls() {
+  const controls = document.getElementById('touch-controls');
+  // Show controls on mobile viewports
+  if (window.innerWidth <= 480) controls.style.display = 'block';
+
+  const btnLeft = document.getElementById('btn-left');
+  const btnRight = document.getElementById('btn-right');
+  const btnDown = document.getElementById('btn-down');
+  const btnRotate = document.getElementById('btn-rotate');
+  const btnDrop = document.getElementById('btn-drop');
+
+  btnLeft.addEventListener('click', () => move(-1));
+  btnRight.addEventListener('click', () => move(1));
+  btnDown.addEventListener('click', softDrop);
+  btnRotate.addEventListener('click', () => rotate(1));
+  btnDrop.addEventListener('click', hardDrop);
+
+  // Prevent default touch behavior on buttons
+  [btnLeft, btnRight, btnDown, btnRotate, btnDrop].forEach(btn => {
+    btn.addEventListener('touchstart', e => e.preventDefault());
+  });
+}
+
+// Initialize controls after DOM ready
+document.addEventListener('DOMContentLoaded', initTouchControls);
 
 // ---------- Start ----------
 resetGame();
