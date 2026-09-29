@@ -3,624 +3,1362 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tetris</title>
+<title>iPhone UI Mockup</title>
 <style>
-  :root {
-    --bg: #0f1220;
-    --panel: #1a1f35;
-    --border: #2c3354;
-    --text: #e8ecf8;
-    --muted: #8b93b5;
-  }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 18px;
-    padding: 24px;
-    background: radial-gradient(1200px 800px at 50% -10%, #1c2340, var(--bg));
-    color: var(--text);
-    font-family: 'Segoe UI', system-ui, sans-serif;
-  }
-
-  h1 {
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: 0.35em;
-    text-indent: 0.35em; /* balances the trailing letter-space */
-  }
-
-  .game {
-    display: flex;
-    align-items: flex-start;
-    gap: 22px;
-  }
-
-  .board-wrap {
-    position: relative;
-    border-radius: 10px;
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh; background: #1a1a2e; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     overflow: hidden;
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45), 0 0 0 1px var(--border);
   }
 
-  #board { display: block; background: #0a0d1a; }
+  .iphone {
+    width: 380px; height: 780px;
+    background: #1a1a1a; border-radius: 55px;
+    padding: 12px; position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 0 0 2px #333;
+  }
+  .iphone::before {
+    content: ''; position: absolute; top: 12px; left: -3px;
+    width: 4px; height: 35px; background: #333; border-radius: 2px;
+  }
+  .iphone::after {
+    content: ''; position: absolute; top: 60px; left: -3px;
+    width: 4px; height: 55px; background: #333; border-radius: 2px;
+    box-shadow: 0 80px 0 #333, 0 140px 0 #333;
+  }
+  .screen {
+    width: 100%; height: 100%; border-radius: 44px;
+    overflow: hidden; position: relative;
+    background: linear-gradient(145deg, #1a0a2e, #2d1b69, #0f3460, #16213e);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+  }
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 
-  .overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
+  .dynamic-island {
+    position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+    width: 120px; height: 34px; background: #000; border-radius: 20px;
+    z-index: 100; display: flex; align-items: center; justify-content: center;
+  }
+
+  .status-bar {
+    position: absolute; top: 16px; left: 28px; right: 28px;
+    display: flex; justify-content: space-between; align-items: center;
+    color: #fff; font-size: 13px; font-weight: 600; z-index: 90;
+    padding-top: 4px;
+  }
+  .status-bar .time { font-size: 15px; }
+  .status-icons { display: flex; gap: 5px; align-items: center; font-size: 12px; }
+  .status-icons svg { width: 16px; height: 16px; fill: #fff; }
+
+  .home-screen {
+    padding: 80px 20px 50px; display: grid;
+    grid-template-columns: repeat(4, 1fr); gap: 18px 12px;
+    align-content: start; min-height: 100%;
+  }
+
+  .app-icon {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    cursor: pointer; transition: transform 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .app-icon:hover { transform: scale(1.1); }
+  .app-icon:active { transform: scale(0.9); }
+  .app-icon .icon {
+    width: 60px; height: 60px; border-radius: 15px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+    position: relative; overflow: hidden;
+  }
+  .app-icon .icon::after {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 50%; background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent);
+    border-radius: 15px 15px 0 0;
+  }
+  .app-icon .label {
+    font-size: 11px; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    text-align: center; font-weight: 500;
+  }
+
+  .dock {
+    position: absolute; bottom: 20px; left: 16px; right: 16px;
+    background: rgba(255,255,255,0.12); backdrop-filter: blur(30px);
+    border-radius: 24px; padding: 12px; display: flex;
+    justify-content: space-around; align-items: center;
+  }
+  .dock .app-icon .label { display: none; }
+
+  .home-indicator {
+    position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+    width: 134px; height: 5px; background: rgba(255,255,255,0.4);
+    border-radius: 3px; cursor: pointer; z-index: 200;
+    transition: background 0.2s;
+  }
+  .home-indicator:hover { background: rgba(255,255,255,0.7); }
+
+  .app-view {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 150; transform: scale(0.9); opacity: 0;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none; display: flex; flex-direction: column;
+  }
+  .app-view.active {
+    transform: scale(1); opacity: 1; pointer-events: all;
+  }
+
+  .app-header {
+    display: flex; align-items: center; padding: 50px 16px 12px;
+    background: rgba(30,30,30,0.95); backdrop-filter: blur(20px);
+    border-bottom: 0.5px solid rgba(255,255,255,0.1);
+  }
+  .app-header .back-btn {
+    background: none; border: none; color: #0a84ff;
+    font-size: 16px; cursor: pointer; padding: 4px 0;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .app-header .back-btn svg { width: 12px; height: 18px; }
+  .app-header .title {
+    flex: 1; text-align: center; color: #fff;
+    font-size: 17px; font-weight: 600;
+  }
+  .app-header .spacer { width: 40px; }
+
+  .app-content {
+    flex: 1; overflow-y: auto; padding: 16px;
+    background: #000; color: #fff;
+  }
+
+  /* Settings */
+  .settings-list { list-style: none; }
+  .settings-list li {
+    padding: 12px 16px; border-bottom: 0.5px solid rgba(255,255,255,0.1);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .settings-list li:first-child { border-radius: 12px; margin-bottom: 8px; border: none; }
+  .toggle {
+    width: 50px; height: 30px; border-radius: 15px;
+    background: #39393d; cursor: pointer; position: relative;
+    transition: background 0.3s;
+  }
+  .toggle.on { background: #30d158; }
+  .toggle::after {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: #fff; transition: transform 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  .toggle.on::after { transform: translateX(20px); }
+
+  /* Messages */
+  .chat-messages { display: flex; flex-direction: column; gap: 8px; padding-top: 10px; }
+  .chat-bubble {
+    max-width: 80%; padding: 10px 14px; border-radius: 18px;
+    font-size: 14px; line-height: 1.4;
+  }
+  .chat-bubble.sent {
+    background: #0a84ff; color: #fff; align-self: flex-end;
+    border-bottom-right-radius: 6px;
+  }
+  .chat-bubble.received {
+    background: #3a3a3c; color: #fff; align-self: flex-start;
+    border-bottom-left-radius: 6px;
+  }
+  .chat-input {
+    display: flex; gap: 8px; padding: 10px 16px;
+    background: rgba(30,30,30,0.95);
+  }
+  .chat-input input {
+    flex: 1; padding: 10px 14px; border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.2); background: #1c1c1e;
+    color: #fff; font-size: 14px; outline: none;
+  }
+  .chat-input button {
+    padding: 10px 16px; border-radius: 20px; border: none;
+    background: #0a84ff; color: #fff; font-weight: 600; cursor: pointer;
+  }
+
+  /* Notes */
+  .note-area {
+    width: 100%; min-height: 300px; background: #1c1c1e;
+    border: none; color: #fff; font-size: 15px; padding: 16px;
+    border-radius: 12px; resize: none; outline: none;
+    font-family: inherit; line-height: 1.6;
+  }
+  .note-area::placeholder { color: #666; }
+  .note-actions { display: flex; gap: 10px; margin-top: 12px; }
+  .note-actions button {
+    flex: 1; padding: 12px; border-radius: 12px; border: none;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+  }
+  .btn-save { background: #30d158; color: #fff; }
+  .btn-clear { background: #3a3a3c; color: #fff; }
+
+  /* Weather */
+  .weather-main {
+    text-align: center; padding: 20px;
+  }
+  .weather-temp { font-size: 72px; font-weight: 200; color: #fff; }
+  .weather-desc { font-size: 18px; color: rgba(255,255,255,0.7); margin-top: 4px; }
+  .weather-location { font-size: 22px; color: #fff; font-weight: 600; }
+  .weather-forecast {
+    display: flex; gap: 8px; margin-top: 24px;
+    overflow-x: auto; padding: 10px 0;
+  }
+  .forecast-day {
+    flex: 1; text-align: center; padding: 12px 8px;
+    background: rgba(255,255,255,0.08); border-radius: 14px;
+  }
+  .forecast-day .day { font-size: 12px; color: rgba(255,255,255,0.6); }
+  .forecast-day .icon { font-size: 24px; margin: 8px 0; }
+  .forecast-day .temp { font-size: 14px; color: #fff; font-weight: 600; }
+
+  /* Photos */
+  .photos-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+  }
+  .photo-item {
+    aspect-ratio: 1; border-radius: 4px; overflow: hidden;
+    cursor: pointer; transition: transform 0.2s;
+  }
+  .photo-item:hover { transform: scale(1.05); }
+  .photo-item div {
+    width: 100%; height: 100%; display: flex;
+    align-items: center; justify-content: center;
+    font-size: 32px;
+  }
+
+  /* Calculator */
+  .calc-display {
+    text-align: right; padding: 20px; font-size: 52px;
+    font-weight: 200; color: #fff; min-height: 100px;
+    word-break: break-all;
+  }
+  .calc-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+    padding: 0 8px 16px;
+  }
+  .calc-btn {
+    padding: 18px; border-radius: 50%; border: none;
+    font-size: 22px; cursor: pointer; font-weight: 500;
+    transition: opacity 0.15s;
+  }
+  .calc-btn:active { opacity: 0.7; }
+  .calc-btn.num { background: #333; color: #fff; }
+  .calc-btn.op { background: #ff9f0a; color: #fff; }
+  .calc-btn.func { background: #a5a5a5; color: #000; }
+  .calc-btn.zero { grid-column: span 2; border-radius: 50px; }
+
+  /* Music */
+  .music-player {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 20px; text-align: center;
+  }
+  .music-art {
+    width: 260px; height: 260px; border-radius: 16px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 80px; margin-bottom: 24px;
+    box-shadow: 0 20px 40px rgba(102,126,234,0.3);
+  }
+  .music-title { font-size: 20px; font-weight: 600; color: #fff; }
+  .music-artist { font-size: 15px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+  .music-progress {
+    width: 100%; margin-top: 24px; position: relative;
+  }
+  .music-progress .bar {
+    width: 100%; height: 4px; background: rgba(255,255,255,0.2);
+    border-radius: 2px; overflow: hidden;
+  }
+  .music-progress .bar-fill {
+    height: 100%; width: 35%; background: #fff; border-radius: 2px;
+    transition: width 0.3s;
+  }
+  .music-times {
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 6px;
+  }
+  .music-controls {
+    display: flex; align-items: center; gap: 40px; margin-top: 24px;
+  }
+  .music-controls button {
+    background: none; border: none; color: #fff; cursor: pointer;
+    font-size: 28px; transition: transform 0.15s;
+  }
+  .music-controls button:active { transform: scale(0.85); }
+  .music-controls .play-btn { font-size: 44px; }
+
+  /* Safari */
+  .safari-toolbar {
+    display: flex; gap: 8px; padding: 8px 16px;
+    background: rgba(30,30,30,0.95);
     align-items: center;
-    justify-content: center;
-    gap: 12px;
-    text-align: center;
-    background: rgba(8, 10, 22, 0.8);
-    backdrop-filter: blur(4px);
+  }
+  .safari-url {
+    flex: 1; padding: 10px 14px; border-radius: 10px;
+    background: #1c1c1e; color: #fff; border: 1px solid rgba(255,255,255,0.1);
+    font-size: 14px; outline: none;
+  }
+  .safari-go {
+    padding: 10px 16px; border-radius: 10px; border: none;
+    background: #0a84ff; color: #fff; font-weight: 600; cursor: pointer;
+  }
+  .safari-content {
+    flex: 1; padding: 20px; overflow-y: auto;
+  }
+  .safari-content h1 { font-size: 28px; margin-bottom: 12px; }
+  .safari-content p { color: rgba(255,255,255,0.7); line-height: 1.6; margin-bottom: 12px; }
+
+  /* Tic-Tac-Toe */
+  .ttt-board {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 8px; max-width: 280px; margin: 20px auto;
+  }
+  .ttt-cell {
+    aspect-ratio: 1; border-radius: 12px; border: none;
+    background: #1c1c1e; color: #fff; font-size: 40px;
+    font-weight: 700; cursor: pointer;
+    transition: background 0.15s;
+  }
+  .ttt-cell:hover { background: #2a2a2c; }
+  .ttt-cell:active { transform: scale(0.95); }
+  .ttt-cell.x { color: #0a84ff; }
+  .ttt-cell.o { color: #ff3b30; }
+  .ttt-status {
+    text-align: center; font-size: 18px; color: #fff;
+    margin: 16px 0; font-weight: 600;
+  }
+  .ttt-reset {
+    display: block; margin: 16px auto; padding: 12px 24px;
+    border-radius: 12px; border: none; background: #0a84ff;
+    color: #fff; font-size: 15px; font-weight: 600; cursor: pointer;
   }
 
-  .overlay h2 { font-size: 1.9rem; letter-spacing: 0.2em; text-indent: 0.2em; }
-  .overlay p { color: var(--muted); font-size: 0.95rem; }
-
-  .hidden { display: none !important; }
-
-  button {
-    margin-top: 6px;
-    padding: 10px 22px;
-    font: inherit;
-    font-weight: 600;
-    color: var(--text);
-    background: #3b4a8f;
-    border: 1px solid #5567c9;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.15s ease, transform 0.1s ease;
+  /* Clicker Game */
+  .clicker-area {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; height: 100%;
   }
-  button:hover { background: #4a5cb3; }
-  button:active { transform: scale(0.97); }
+  .click-score {
+    font-size: 64px; font-weight: 200; color: #fff;
+  }
+  .click-label { font-size: 16px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+  .click-btn {
+    width: 160px; height: 160px; border-radius: 50%;
+    border: none; background: linear-gradient(135deg, #30d158, #28a745);
+    color: #fff; font-size: 16px; font-weight: 600;
+    cursor: pointer; margin-top: 32px;
+    box-shadow: 0 10px 30px rgba(48,209,88,0.3);
+    transition: transform 0.1s;
+  }
+  .click-btn:active { transform: scale(0.9); }
+  .click-upgrades {
+    margin-top: 24px; width: 100%;
+  }
+  .upgrade-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 16px; background: rgba(255,255,255,0.05);
+    border-radius: 12px; margin-bottom: 8px;
+  }
+  .upgrade-item .name { font-size: 14px; color: #fff; }
+  .upgrade-item .cost { font-size: 13px; color: rgba(255,255,255,0.5); }
+  .upgrade-btn {
+    padding: 6px 14px; border-radius: 8px; border: none;
+    background: #0a84ff; color: #fff; font-size: 12px;
+    font-weight: 600; cursor: pointer;
+  }
+  .upgrade-btn:disabled { background: #3a3a3c; color: #666; }
 
-  .side {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    width: 172px;
+  /* Camera */
+  .camera-view {
+    position: relative; flex: 1; background: #000;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .camera-view video {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .camera-fallback {
+    width: 100%; height: 100%; display: flex;
+    flex-direction: column; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+  }
+  .camera-fallback .icon { font-size: 60px; margin-bottom: 16px; }
+  .camera-fallback p { color: rgba(255,255,255,0.5); font-size: 14px; }
+  .camera-controls {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 20px; display: flex; justify-content: center;
+    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  }
+  .shutter-btn {
+    width: 70px; height: 70px; border-radius: 50%;
+    border: 4px solid #fff; background: rgba(255,255,255,0.2);
+    cursor: pointer; transition: transform 0.15s;
+  }
+  .shutter-btn:active { transform: scale(0.85); background: rgba(255,255,255,0.5); }
+  .camera-grid {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+  }
+  .camera-grid::before, .camera-grid::after {
+    content: ''; position: absolute; background: rgba(255,255,255,0.15);
+  }
+  .camera-grid::before {
+    top: 33.33%; left: 0; right: 0; height: 0.5px;
+  }
+  .camera-grid::after {
+    top: 66.66%; left: 0; right: 0; height: 0.5px;
   }
 
-  .box {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 14px;
+  /* Flash effect */
+  .flash {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: #fff; opacity: 0; pointer-events: none; z-index: 300;
+    transition: opacity 0.1s;
+  }
+  .flash.active { opacity: 1; }
+
+  .saved-notes-list {
+    margin-top: 12px;
+  }
+  .saved-note-item {
+    padding: 12px 16px; background: rgba(255,255,255,0.05);
+    border-radius: 12px; margin-bottom: 8px; cursor: pointer;
+    transition: background 0.15s;
+  }
+  .saved-note-item:hover { background: rgba(255,255,255,0.1); }
+  .saved-note-item .note-title { font-size: 14px; font-weight: 600; color: #fff; }
+  .saved-note-item .note-preview { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+  .saved-note-item .note-date { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 2px; }
+
+  .search-bar {
+    width: 100%; padding: 10px 14px; border-radius: 10px;
+    background: rgba(255,255,255,0.08); border: none;
+    color: #fff; font-size: 14px; margin-bottom: 12px;
+    outline: none;
+  }
+  .search-bar::placeholder { color: rgba(255,255,255,0.4); }
+
+  .photo-viewer {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.95); z-index: 300;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; transform: scale(0.9); opacity: 0;
+    transition: all 0.3s; pointer-events: none;
+  }
+  .photo-viewer.active { transform: scale(1); opacity: 1; pointer-events: all; }
+  .photo-viewer .big-photo {
+    font-size: 120px;
+  }
+  .photo-viewer .close-btn {
+    position: absolute; top: 50px; right: 20px;
+    background: rgba(255,255,255,0.2); border: none;
+    color: #fff; width: 36px; height: 36px; border-radius: 50%;
+    font-size: 18px; cursor: pointer;
   }
 
-  .label {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--muted);
-    margin-bottom: 6px;
+  .settings-section-title {
+    font-size: 13px; color: rgba(255,255,255,0.4);
+    text-transform: uppercase; padding: 8px 16px; margin-top: 8px;
   }
 
-  .value { font-size: 1.45rem; font-weight: 700; font-variant-numeric: tabular-nums; }
-
-  #next { display: block; margin: 0 auto; background: #0a0d1a; border-radius: 6px; }
-
-  .controls {
-    font-size: 0.75rem;
-    line-height: 1.9;
-    color: var(--muted);
+  .settings-avatar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px; margin-bottom: 8px;
   }
-  .controls b { color: var(--text); font-weight: 600; }
+  .settings-avatar .avatar-circle {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+  }
+  .settings-avatar .avatar-info .name { font-size: 18px; color: #fff; font-weight: 600; }
+  .settings-avatar .avatar-info .email { font-size: 13px; color: rgba(255,255,255,0.5); }
 </style>
 </head>
 <body>
 
-<h1>TETRIS</h1>
+<div class="iphone">
+  <div class="screen" id="screen">
+    <div class="dynamic-island"></div>
 
-<div class="game">
-  <div class="board-wrap">
-    <canvas id="board" width="300" height="600"></canvas>
-    <div id="overlay" class="overlay hidden">
-      <h2 id="overlay-title"></h2>
-      <p id="overlay-sub"></p>
-      <button id="restart-btn" class="hidden">Restart (R)</button>
-    </div>
-  </div>
-
-  <div class="side">
-    <div class="box">
-      <div class="label">Score</div>
-      <div id="score" class="value">0</div>
-    </div>
-    <div class="box">
-      <div class="label">Level</div>
-      <div id="level" class="value">1</div>
-    </div>
-    <div class="box">
-      <div class="label">Lines</div>
-      <div id="lines" class="value">0</div>
-    </div>
-    <div class="box">
-      <div class="label">Next</div>
-      <canvas id="next" width="120" height="120"></canvas>
-    </div>
-    <div class="box controls">
-      <b>&larr; / A</b> &middot; <b>&rarr; / D</b> Move<br>
-      <b>&darr; / S</b> Soft drop<br>
-      <b>&uarr; / W / X</b> Rotate CW<br>
-      <b>Z / Ctrl</b> Rotate CCW<br>
-      <b>Space</b> Hard drop<br>
-      <b>P</b> Pause &middot; <b>R</b> Restart
-      <!-- Mobile touch controls -->
-      <div id="touch-controls" style="display:none; position:absolute; bottom:10px; left:50%; transform:translateX(-50%); z-index:10;">
-        <button id="btn-left" style="margin:5px;">←</button>
-        <button id="btn-rotate" style="margin:5px;">↑</button>
-        <button id="btn-right" style="margin:5px;">→</button>
-        <button id="btn-down" style="margin:5px;">↓</button>
-        <button id="btn-drop" style="margin:5px;">⇩</button>
+    <div class="status-bar">
+      <span class="time" id="statusTime">9:41</span>
+      <div class="status-icons">
+        <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C13.03-1.48 4.73-1.48 1 9zm6 6l3 3 3-3c-1.66-1.67-4.34-1.67-6 0zm6 6l3 3 3-3c-1.66-1.67-4.34-1.67-6 0z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-4h2v-4h4v-2h-4V6h-2v4H7v2h4v4z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.67 7 5.5v15c0 .83.6 1.5 1.33 1.5h11.33c.74 0 1.34-.67 1.34-1.5V5.5c0-.83-.6-1.5-1.33-1.5z"/></svg>
       </div>
     </div>
+
+    <div class="home-screen" id="homeScreen">
+      <div class="app-icon" onclick="openApp('settings')">
+        <div class="icon" style="background: linear-gradient(135deg, #8e8e93, #636366);">⚙️</div>
+        <span class="label">Settings</span>
+      </div>
+      <div class="app-icon" onclick="openApp('messages')">
+        <div class="icon" style="background: linear-gradient(135deg, #34c759, #30b350);">💬</div>
+        <span class="label">Messages</span>
+      </div>
+      <div class="app-icon" onclick="openApp('notes')">
+        <div class="icon" style="background: linear-gradient(135deg, #ffd60a, #ffb800);">📝</div>
+        <span class="label">Notes</span>
+      </div>
+      <div class="app-icon" onclick="openApp('weather')">
+        <div class="icon" style="background: linear-gradient(135deg, #007aff, #0055d4);">🌤️</div>
+        <span class="label">Weather</span>
+      </div>
+      <div class="app-icon" onclick="openApp('photos')">
+        <div class="icon" style="background: linear-gradient(135deg, #ff6b6b, #ee5a24);">🖼️</div>
+        <span class="label">Photos</span>
+      </div>
+      <div class="app-icon" onclick="openApp('calculator')">
+        <div class="icon" style="background: linear-gradient(135deg, #1c1c1e, #000);">🔢</div>
+        <span class="label">Calculator</span>
+      </div>
+      <div class="app-icon" onclick="openApp('music')">
+        <div class="icon" style="background: linear-gradient(135deg, #fc3c48, #e8203a);">🎵</div>
+        <span class="label">Music</span>
+      </div>
+      <div class="app-icon" onclick="openApp('safari')">
+        <div class="icon" style="background: linear-gradient(135deg, #007aff, #0055d4);">🧭</div>
+        <span class="label">Safari</span>
+      </div>
+      <div class="app-icon" onclick="openApp('tictactoe')">
+        <div class="icon" style="background: linear-gradient(135deg, #5ac8fa, #007aff);">❌</div>
+        <span class="label">Tic-Tac-Toe</span>
+      </div>
+      <div class="app-icon" onclick="openApp('clicker')">
+        <div class="icon" style="background: linear-gradient(135deg, #30d158, #28a745);">👆</div>
+        <span class="label">Clicker</span>
+      </div>
+      <div class="app-icon" onclick="openApp('camera')">
+        <div class="icon" style="background: linear-gradient(135deg, #636366, #48484a);">📷</div>
+        <span class="label">Camera</span>
+      </div>
+    </div>
+
+    <div class="dock">
+      <div class="app-icon" onclick="openApp('messages')">
+        <div class="icon" style="background: linear-gradient(135deg, #34c759, #30b350);">💬</div>
+        <span class="label"></span>
+      </div>
+      <div class="app-icon" onclick="openApp('safari')">
+        <div class="icon" style="background: linear-gradient(135deg, #007aff, #0055d4);">🧭</div>
+        <span class="label"></span>
+      </div>
+      <div class="app-icon" onclick="openApp('music')">
+        <div class="icon" style="background: linear-gradient(135deg, #fc3c48, #e8203a);">🎵</div>
+        <span class="label"></span>
+      </div>
+      <div class="app-icon" onclick="openApp('camera')">
+        <div class="icon" style="background: linear-gradient(135deg, #636366, #48484a);">📷</div>
+        <span class="label"></span>
+      </div>
+    </div>
+
+    <div class="home-indicator" onclick="goHome()"></div>
+
+    <!-- APP VIEWS -->
+
+    <!-- Settings -->
+    <div class="app-view" id="app-settings" style="background: #000;">
+      <div class="app-header">
+        <button class="back-btn" onclick="goHome()">
+          <svg viewBox="0 0 12 18"><path d="M11 1L3 9l8 8" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+          Settings
+        </button>
+      </div>
+      <div class="app-content">
+        <div class="settings-avatar">
+          <div class="avatar-circle">👤</div>
+          <div class="avatar-info">
+            <div class="name">User</div>
+            <div class="email">user@icloud.com</div>
+          </div>
+        </div>
+        <ul class="settings-list">
+          <li>
+            <span>✈️ Airplane Mode</span>
+            <div class="toggle" onclick="this.classList.toggle('on')"></div>
+          </li>
+          <li>
+            <span>📶 Wi-Fi</span>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </li>
+          <li>
+            <span>🔵 Bluetooth</span>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </li>
+          <li>
+            <span>📱 Cellular</span>
+            <span style="color:rgba(255,255,255,0.3)">›</span>
+          </li>
+        </ul>
+        <div class="settings-section-title">Preferences</div>
+        <ul class="settings-list">
+          <li>
+            <span>🔔 Notifications</span>
+            <span style="color:rgba(255,255,255,0.3)">›</span>
+          </li>
+          <li>
+            <span>🔊 Sounds & Haptics</span>
+            <span style="color:rgba(255,255,255,0.3)">›</span>
+          </li>
+          <li>
+            <span>🌙 Focus</span>
+            <span style="color:rgba(255,255,255,0.3)">›</span>
+          </li>
+          <li>
+            <span>⏱️ Screen Time</span>
+            <span style="color:rgba(255,255,255,0.3)">›</span>
+          </li>
+        </ul>
+        <div class="settings-section-title">General</div>
+        <ul class="settings-list">
+          <li>
+            <span>🌙 Dark Mode</span>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </li>
+          <li>
+            <span>🔋 Battery</span>
+            <span style="color:rgba(255,255,255,0.3)">›</span>
+          </li>
+          <li>
+            <span>🔒 Privacy</span>
+            <span style="color:rgba(255,255,255,0.3)">›</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="app-view" id="app-messages" style="background: #000;">
+      <div class="app-header">
+        <button class="back-btn" onclick="goHome()">
+          <svg viewBox="0 0 12 18"><path d="M11 1L3 9l8 8" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+          Messages
+        </button>
+        <span class="title">Chat</span>
+        <span class="spacer"></span>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-bubble received">Hey! How are you? 😊</div>
+        <div class="chat-bubble sent">I'm great! Just exploring this iPhone mockup</div>
+        <div class="chat-bubble received">That sounds awesome! What do you think of it?</div>
+        <div class="chat-bubble sent">It looks really nice! Love the animations 🎨</div>
+        <div class="chat-bubble received">Glad you like it! Let me know if you want to add more features</div>
+      </div>
+      <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Message" onkeypress="if(event.key==='Enter')sendMessage()">
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="app-view" id="app-notes" style="background: #000;">
+      <div class="app-header">
+        <button class="back-btn" onclick="goHome()">
+          <svg viewBox="0 0 12 18"><path d="M11 1L3 9l8 8" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+          Notes
+        </button>
+        <span class="title">Notes</span>
+        <span class="spacer"></span>
+      </div>
+      <div class="app-content">
+        <input class="search-bar" type="text" placeholder="Search notes..." oninput="filterNotes(this.value)">
+        <div id="savedNotesList" class="saved-notes-list"></div>
+        <textarea class="note-area" id="noteArea" placeholder="Start typing your note..."></textarea>
+        <div class="note-actions">
+          <button class="btn-save" onclick="saveNote()">💾 Save Note</button>
+          <button class="btn-clear" onclick="clearNote()">🗑️ Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weather -->
+    <div class="app-view" id="app-weather" style="background: #000;">
+      <div class="app-header">
+        <button class="back-btn" onclick="goHome()">
+          <svg viewBox="0 0 12 18"><path d="M11 1L3 9l8 8" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+          Weather
+        </button>
+        <span class="title">Weather</span>
+        <span class="spacer"></span>
+      </div>
+      <div class="app-content">
+        <div class="weather-main">
+          <div class="weather-location">San Francisco</div>
+          <div class="weather-temp">72°</div>
+          <div class="weather-desc">Partly Cloudy</div>
+          <div class="weather-forecast">
+            <div class="forecast-day">
+              <div class="day">Mon</div>
+              <div class="icon">☀️</div>
+              <div class="temp">75°</div>
+            </div>
+            <div class="forecast-day">
+              <div class="day">Tue</div>
+              <div class="icon">⛅</div>
+              <div class="temp">68°</div>
+            </div>
+            <div class="forecast-day">
+              <div class="day">Wed</div>
+              <div class="icon">🌧️</div>
+              <div class="temp">62°</div>
+            </div>
+            <div class="forecast-day">
+              <div class="day">Thu</div>
+              <div class="icon">🌤️</div>
+              <div class="temp">70°</div>
+            </div>
+            <div class="forecast-day">
+              <div class="day">Fri</div>
+              <div class="icon">☀️</div>
+              <div class="temp">78°</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Photos -->
+    <div class="app-view" id="app-photos" style="background: #000;">
+      <div class="app-header">
+        <button class="back-btn" onclick="goHome()">
+          <svg viewBox="0 0 12 18"><path d="M11 1L3 9l8 8" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+          Photos
+        </button>
+        <span class="title">Library</span>
+        <span class="spacer"></span>
+      </div>
+      <div class="app-content">
+        <div class="photos-grid" id="photosGrid"></div>
+      </div>
+    </div>
+    <div class="photo-viewer" id="photoViewer">
+      <button class="close-btn" onclick="closePhotoViewer()">✕</button>
+      <div class="big-photo" id="bigPhoto"></div>
+    </div>
+
+    <!-- Calculator -->
+    <div class="app-view" id="app-calculator" style="background: #000;">
+      <div class="app-header">
+        <button class="back-btn" onclick="goHome()">
+          <svg viewBox="0 0 12 18"><path d="M11 1L3 9l8 8" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+          Calculator
+        </button>
+        <span class="title"></span>
+        <span class="spacer"></span>
+      </div>
+      <div class="app-content" style="padding:0;">
+        <div class="calc-display" id="calcDisplay">0</div>
+        <div class="calc-grid">
+          <button class="calc-btn func" onclick="calcFunc('clear')">AC</button>
+          <button class="calc-btn func" onclick="calcFunc('negate')">±</button>
+          <button class="calc-btn func" onclick="calcFunc('percent')">%</button>
+          <button class="calc-btn op" onclick="calcInput('÷')">÷</button>
+          <button class="calc-btn num" onclick="calcInput('7')">7</button>
+          <button class="calc-btn num" onclick="calcInput('8')">8</button>
+          <button class="calc-btn num" onclick="calcInput('9')">9</button>
+          <button class="calc-btn op" onclick="calcInput('×')">×</button>
+          <button class="calc-btn num" onclick="calcInput('4')">4</button>
+          <button class="calc-btn num" onclick="calcInput('5')">5</button>
+          <button class="calc-btn num" onclick="calcInput('6')">6</button>
+          <button class="calc-btn op" onclick="calcInput('-')">−</button>
+          <button class="calc-btn num" onclick="calcInput('1')">1</button>
+          <button class="calc-btn num" onclick="calcInput('2')">2</button>
+          <button class="calc-btn num" onclick="calcInput('3')">3</button>
+          <button class="calc-btn op" onclick="calcInput('+')">+</button>
+          <button class="calc-btn num zero" onclick="calcInput('0')">0</button>
+          <button class="calc-btn num" onclick="calcInput('.')">.</button>
+          <button class="calc-btn op" onclick="calcInput('=')">=</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Music -->
+    <div class="app-view" id="app-music" style="background: #000;">
+      <div class="app-header">
+        <button class="back-btn" onclick="goHome()">
+          <svg viewBox="0 0 12 18"><path d="M11 1L3 9l8 8" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+          Music
+        </button>
+        <span class="title">Now Playing</span>
+        <span class="spacer"></span>
+      </div>
+      <div class="app-content">
+        <div class="music-player">
+          <div class="music-art" id="musicArt">🎵</div>
+          <div class="music-title" id="musicTitle">Blinding Lights</div>
+          <div class="music-artist" id="musicArtist">The Weeknd</div>
+          <div class="music-progress">
+            <div class="bar"><div class="bar-fill" id="musicProgress"></div></div>
+            <div class="music-times">
+              <span id="musicCurrentTime">1:23</span>
+              <span id="musicTotalTime">3:20</span>
+            </div>
+          </div>
+          <div class="music-controls">
+            <button onclick="prevTrack()">⏮️</button>
+            <button class="play-btn" id="playBtn" onclick="togglePlay()">▶️</button>
+            <button onclick="nextTrack()">⏭️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Safari -->
+    <div class="app-view" id="app-safari" style="background: #000;">
+      <div class="app-header" style="padding-bottom:0;">
+        <button class="back-btn" onclick="goHome()">
+          <svg viewBox="0 0 12 18"><path d="M11 1L3 9l8 8" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+        </button>
+        <span class="title">Safari</span>
+        <span class="spacer"></span>
+      </div>
+      <div class="safari-toolbar">
+        <input class="safari-url" id="safariUrl" type="text" placeholder="Search or enter website name" value="apple.com">
+        <button class="safari-go" onclick="goSafari()">Go</button>
+      </div>
+      <div class="app-content" id="safariContent">
+        <div class="safari-content">
+          <h1>🍎 Apple</h1>
+          <p>Think different. Apple creates products that blend innovative technology with elegant design.</p>
+          <p>From the iPhone to the MacBook, every product is crafted to inspire creativity and productivity.</p>
+          <p style="margin-top:20px; color: rgba(255,255,255,0.4); font-size: 12px;">This is a simulated browser interface.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tic-Tac-Toe -->
+    <div class="app-view" id="app-tictactoe" style="background: #000;">
+      <div class="app-header">
+        <button class="back-btn" onclick="goHome()">
+          <svg viewBox="0 0 12 18"><path d="M11 1L3 9l8 8" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+          Tic-Tac-Toe
+        </button>
+        <span class="title">Tic-Tac-Toe</span>
+        <span class="spacer"></span>
+      </div>
+      <div class="app-content">
+        <div class="ttt-status" id="tttStatus">Your turn (X)</div>
+        <div class="ttt-board" id="tttBoard"></div>
+        <button class="ttt-reset" onclick="resetTTT()">New Game</button>
+      </div>
+    </div>
+
+    <!-- Clicker Game -->
+    <div class="app-view" id="app-clicker" style="background: #000;">
+      <div class="app-header">
+        <button class="back-btn" onclick="goHome()">
+          <svg viewBox="0 0 12 18"><path d="M11 1L3 9l8 8" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+          Clicker
+        </button>
+        <span class="title">Tap to Score!</span>
+        <span class="spacer"></span>
+      </div>
+      <div class="app-content">
+        <div class="clicker-area">
+          <div class="click-score" id="clickScore">0</div>
+          <div class="click-label">taps</div>
+          <button class="click-btn" onclick="doClick()">TAP!</button>
+          <div class="click-upgrades">
+            <div class="upgrade-item">
+              <div>
+                <div class="name">🖱️ Auto Clicker</div>
+                <div class="cost">Cost: 50</div>
+              </div>
+              <button class="upgrade-btn" id="upgAuto" onclick="buyUpgrade('auto')" disabled>Buy</button>
+            </div>
+            <div class="upgrade-item">
+              <div>
+                <div class="name">⚡ Double Tap</div>
+                <div class="cost">Cost: 200</div>
+              </div>
+              <button class="upgrade-btn" id="upgDouble" onclick="buyUpgrade('double')" disabled>Buy</button>
+            </div>
+            <div class="upgrade-item">
+              <div>
+                <div class="name">🚀 Mega Click</div>
+                <div class="cost">Cost: 1000</div>
+              </div>
+              <button class="upgrade-btn" id="upgMega" onclick="buyUpgrade('mega')" disabled>Buy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Camera -->
+    <div class="app-view" id="app-camera" style="background: #000;">
+      <div class="app-header" style="background:transparent; border:none;">
+        <button class="back-btn" onclick="goHome()" style="color:#fff;">
+          <svg viewBox="0 0 12 18"><path d="M11 1L3 9l8 8" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+        </button>
+        <span class="title" style="color:#fff;">Camera</span>
+        <span class="spacer"></span>
+      </div>
+      <div class="camera-view" id="cameraView">
+        <video id="cameraVideo" autoplay playsinline muted></video>
+        <div class="camera-fallback" id="cameraFallback">
+          <div class="icon">📷</div>
+          <p>Camera access unavailable</p>
+          <p style="font-size:12px; margin-top:8px;">Tap the shutter to simulate a photo</p>
+        </div>
+        <div class="camera-grid"></div>
+        <div class="camera-controls">
+          <button class="shutter-btn" onclick="takePhoto()"></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="flash" id="flash"></div>
   </div>
 </div>
 
 <script>
-(() => {
-'use strict';
-
-// ---------- Constants ----------
-const COLS = 10;
-const ROWS = 20;
-const CELL = 30;          // px per cell on the main board
-const NCELL = 28;         // px per cell in the next-piece preview
-const LINE_SCORES = [0, 100, 300, 500, 800];
-
-// Piece shapes (square matrices so rotation stays inside the bounding box)
-const SHAPES = {
-  I: [[0, 0, 0, 0],
-      [1, 1, 1, 1],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0]],
-  J: [[1, 0, 0],
-      [1, 1, 1],
-      [0, 0, 0]],
-  L: [[0, 0, 1],
-      [1, 1, 1],
-      [0, 0, 0]],
-  O: [[1, 1],
-      [1, 1]],
-  S: [[0, 1, 1],
-      [1, 1, 0],
-      [0, 0, 0]],
-  T: [[0, 1, 0],
-      [1, 1, 1],
-      [0, 0, 0]],
-  Z: [[1, 1, 0],
-      [0, 1, 1],
-      [0, 0, 0]]
-};
-
-const COLORS = {
-  I: '#4ec9e8',
-  J: '#3e68ff',
-  L: '#ff9f1c',
-  O: '#ffd500',
-  S: '#42d77d',
-  T: '#b13ce6',
-  Z: '#ef2f45'
-};
-
-// ---------- DOM ----------
-const boardCanvas = document.getElementById('board');
-const ctx = boardCanvas.getContext('2d');
-const nextCanvas = document.getElementById('next');
-const nctx = nextCanvas.getContext('2d');
-const scoreEl = document.getElementById('score');
-const levelEl = document.getElementById('level');
-const linesEl = document.getElementById('lines');
-const overlay = document.getElementById('overlay');
-const overlayTitle = document.getElementById('overlay-title');
-const overlaySub = document.getElementById('overlay-sub');
-const restartBtn = document.getElementById('restart-btn');
-
-// ---------- State ----------
-let board;            // ROWS x COLS, cells hold a piece letter or 0
-let current = null;   // { type, matrix, x, y }
-let nextType = null;
-let bag = [];
-let score = 0;
-let level = 1;
-let lines = 0;
-let state = 'playing'; // 'playing' | 'paused' | 'gameover'
-let dropTimer = 0;
-let lastTime = performance.now();
-
-// ---------- Helpers ----------
-function emptyBoard() {
-  return Array.from({ length: ROWS }, () => new Array(COLS).fill(0));
-}
-
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+  // Update time
+  function updateTime() {
+    const now = new Date();
+    const h = now.getHours();
+    const m = now.getMinutes().toString().padStart(2, '0');
+    document.getElementById('statusTime').textContent = `${h}:${m}`;
   }
-  return arr;
-}
+  updateTime();
+  setInterval(updateTime, 10000);
 
-// 7-bag randomizer: deal from a shuffled bag of all seven pieces.
-function drawFromBag() {
-  if (bag.length === 0) bag = shuffle(['I', 'J', 'L', 'O', 'S', 'T', 'Z']);
-  return bag.pop();
-}
+  let currentApp = null;
 
-function makePiece(type) {
-  const shape = SHAPES[type];
-  return {
-    type,
-    matrix: shape.map(row => row.slice()),
-    x: Math.floor((COLS - shape[0].length) / 2),
-    y: 0
-  };
-}
-
-function dropInterval() {
-  return Math.max(90, 720 - (level - 1) * 60); // ms per gravity step
-}
-
-// ---------- Core rules ----------
-function collide(matrix, ox, oy) {
-  for (let r = 0; r < matrix.length; r++) {
-    for (let c = 0; c < matrix[r].length; c++) {
-      if (!matrix[r][c]) continue;
-      const x = c + ox;
-      const y = r + oy;
-      if (x < 0 || x >= COLS || y < 0 || y >= ROWS) return true;
-      if (board[y][x]) return true;
+  function openApp(name) {
+    if (currentApp) {
+      document.getElementById('app-' + currentApp).classList.remove('active');
     }
-  }
-  return false;
-}
+    document.getElementById('app-' + name).classList.add('active');
+    currentApp = name;
 
-function rotateMatrix(m, dir) {
-  const n = m.length;
-  const res = Array.from({ length: n }, () => new Array(n).fill(0));
-  for (let r = 0; r < n; r++) {
-    for (let c = 0; c < n; c++) {
-      // dir > 0: clockwise, dir < 0: counter-clockwise
-      res[r][c] = dir > 0 ? m[n - 1 - c][r] : m[c][n - 1 - r];
+    if (name === 'photos') loadPhotos();
+    if (name === 'tictactoe') resetTTT();
+    if (name === 'camera') initCamera();
+    if (name === 'notes') loadSavedNotes();
+  }
+
+  function goHome() {
+    if (currentApp) {
+      document.getElementById('app-' + currentApp).classList.remove('active');
+      currentApp = null;
     }
-  }
-  return res;
-}
-
-function move(dx) {
-  if (!collide(current.matrix, current.x + dx, current.y)) {
-    current.x += dx;
-  }
-}
-
-function rotate(dir) {
-  const rotated = rotateMatrix(current.matrix, dir);
-  // Simple wall kicks: try staying put, then nudge left/right.
-  for (const dx of [0, -1, 1, -2, 2]) {
-    if (!collide(rotated, current.x + dx, current.y)) {
-      current.matrix = rotated;
-      current.x += dx;
-      return;
-    }
-  }
-}
-
-function softDrop() {
-  if (!collide(current.matrix, current.x, current.y + 1)) {
-    current.y++;
-    score += 1;
-    dropTimer = 0;
-    updateHud();
-  } else {
-    lockPiece();
-  }
-}
-
-function hardDrop() {
-  let dist = 0;
-  while (!collide(current.matrix, current.x, current.y + 1)) {
-    current.y++;
-    dist++;
-  }
-  score += dist * 2;
-  dropTimer = 0;
-  lockPiece();
-}
-
-function gravityStep() {
-  if (!collide(current.matrix, current.x, current.y + 1)) {
-    current.y++;
-  } else {
-    lockPiece();
-  }
-}
-
-function lockPiece() {
-  const { matrix, x, y, type } = current;
-  for (let r = 0; r < matrix.length; r++) {
-    for (let c = 0; c < matrix[r].length; c++) {
-      if (matrix[r][c]) board[y + r][x + c] = type;
-    }
-  }
-  clearLines();
-  spawnPiece();
-}
-
-function clearLines() {
-  let cleared = 0;
-  for (let r = ROWS - 1; r >= 0; r--) {
-    if (board[r].every(v => v !== 0)) {
-      board.splice(r, 1);
-      board.unshift(new Array(COLS).fill(0));
-      cleared++;
-      r++; // rows shifted down: re-check this index
-    }
-  }
-  if (cleared > 0) {
-    score += LINE_SCORES[cleared] * level;
-    lines += cleared;
-    level = Math.floor(lines / 10) + 1;
-  }
-}
-
-function spawnPiece() {
-  current = makePiece(nextType);
-  nextType = drawFromBag();
-  drawNext();
-  if (collide(current.matrix, current.x, current.y)) {
-    gameOver();
-  }
-}
-
-// ---------- Game flow ----------
-function resetGame() {
-  board = emptyBoard();
-  bag = [];
-  score = 0;
-  level = 1;
-  lines = 0;
-  dropTimer = 0;
-  nextType = drawFromBag();
-  spawnPiece();
-  state = 'playing';
-  hideOverlay();
-  updateHud();
-}
-
-function togglePause() {
-  if (state === 'playing') {
-    state = 'paused';
-    showOverlay('PAUSED', 'Press P to resume', false);
-  } else if (state === 'paused') {
-    state = 'playing';
-    hideOverlay();
-  }
-}
-
-function gameOver() {
-  state = 'gameover';
-  showOverlay('GAME OVER', `Final score: ${score.toLocaleString()}`, true);
-}
-
-// ---------- Rendering ----------
-function drawCell(c, r, color) {
-  const px = c * CELL;
-  const py = r * CELL;
-  ctx.fillStyle = color;
-  ctx.fillRect(px, py, CELL, CELL);
-  // Subtle bevel for depth
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.18)';
-  ctx.fillRect(px, py, CELL, 3);
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.22)';
-  ctx.fillRect(px, py + CELL - 3, CELL, 3);
-}
-
-function draw() {
-  ctx.clearRect(0, 0, boardCanvas.width, boardCanvas.height);
-
-  // Faint grid lines
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
-  ctx.lineWidth = 1;
-  for (let c = 1; c < COLS; c++) {
-    ctx.beginPath();
-    ctx.moveTo(c * CELL + 0.5, 0);
-    ctx.lineTo(c * CELL + 0.5, boardCanvas.height);
-    ctx.stroke();
-  }
-  for (let r = 1; r < ROWS; r++) {
-    ctx.beginPath();
-    ctx.moveTo(0, r * CELL + 0.5);
-    ctx.lineTo(boardCanvas.width, r * CELL + 0.5);
-    ctx.stroke();
-  }
-
-  // Locked cells
-  for (let r = 0; r < ROWS; r++) {
-    for (let c = 0; c < COLS; c++) {
-      if (board[r][c]) drawCell(c, r, COLORS[board[r][c]]);
+    // Stop camera if active
+    const video = document.getElementById('cameraVideo');
+    if (video.srcObject) {
+      video.srcObject.getTracks().forEach(t => t.stop());
     }
   }
 
-  // Active piece
-  if (current) {
-    const { matrix, x, y, type } = current;
-    for (let r = 0; r < matrix.length; r++) {
-      for (let c = 0; c < matrix[r].length; c++) {
-        if (matrix[r][c] && y + r >= 0) drawCell(x + c, y + r, COLORS[type]);
+  // Calculator
+  let calcCurrent = '0';
+  let calcPrevious = '';
+  let calcOperator = '';
+  let calcReset = false;
+
+  function calcInput(val) {
+    const display = document.getElementById('calcDisplay');
+    if (val === '=') {
+      if (calcOperator && calcPrevious) {
+        const prev = parseFloat(calcPrevious);
+        const curr = parseFloat(calcCurrent);
+        let result = 0;
+        switch (calcOperator) {
+          case '+': result = prev + curr; break;
+          case '-': result = prev - curr; break;
+          case '×': result = prev * curr; break;
+          case '÷': result = curr !== 0 ? prev / curr : 'Error'; break;
+        }
+        calcCurrent = String(result);
+        calcPrevious = '';
+        calcOperator = '';
+      }
+    } else if (['+', '-', '×', '÷'].includes(val)) {
+      calcOperator = val;
+      calcPrevious = calcCurrent;
+      calcReset = true;
+    } else if (val === '.') {
+      if (!calcCurrent.includes('.')) calcCurrent += '.';
+    } else {
+      if (calcReset || calcCurrent === '0') {
+        calcCurrent = val;
+        calcReset = false;
+      } else {
+        calcCurrent += val;
+      }
+    }
+    display.textContent = calcCurrent;
+  }
+
+  function calcFunc(fn) {
+    const display = document.getElementById('calcDisplay');
+    if (fn === 'clear') {
+      calcCurrent = '0'; calcPrevious = ''; calcOperator = ''; calcReset = false;
+    } else if (fn === 'negate') {
+      calcCurrent = String(-parseFloat(calcCurrent));
+    } else if (fn === 'percent') {
+      calcCurrent = String(parseFloat(calcCurrent) / 100);
+    }
+    display.textContent = calcCurrent;
+  }
+
+  // Messages
+  function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+    const messages = document.getElementById('chatMessages');
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble sent';
+    bubble.textContent = text;
+    messages.appendChild(bubble);
+    input.value = '';
+    messages.scrollTop = messages.scrollHeight;
+
+    // Auto reply
+    setTimeout(() => {
+      const replies = [
+        'That\'s cool! 😎', 'I totally agree!', 'Haha nice! 😂',
+        'Interesting... tell me more!', 'Great idea! 💡', 'Awesome! 🎉'
+      ];
+      const reply = document.createElement('div');
+      reply.className = 'chat-bubble received';
+      reply.textContent = replies[Math.floor(Math.random() * replies.length)];
+      messages.appendChild(reply);
+      messages.scrollTop = messages.scrollHeight;
+    }, 1000);
+  }
+
+  // Notes
+  let notes = JSON.parse(localStorage.getItem('iphoneNotes') || '[]');
+
+  function saveNote() {
+    const text = document.getElementById('noteArea').value.trim();
+    if (!text) return;
+    const note = {
+      id: Date.now(),
+      title: text.substring(0, 30) + (text.length > 30 ? '...' : ''),
+      text: text,
+      date: new Date().toLocaleString()
+    };
+    notes.unshift(note);
+    localStorage.setItem('iphoneNotes', JSON.stringify(notes));
+    document.getElementById('noteArea').value = '';
+    loadSavedNotes();
+  }
+
+  function loadSavedNotes() {
+    const list = document.getElementById('savedNotesList');
+    list.innerHTML = '';
+    notes.forEach(note => {
+      const item = document.createElement('div');
+      item.className = 'saved-note-item';
+      item.innerHTML = `
+        <div class="note-title">${note.title}</div>
+        <div class="note-preview">${note.text.substring(0, 60)}...</div>
+        <div class="note-date">${note.date}</div>
+      `;
+      item.onclick = () => {
+        document.getElementById('noteArea').value = note.text;
+      };
+      list.appendChild(item);
+    });
+  }
+
+  function clearNote() {
+    document.getElementById('noteArea').value = '';
+  }
+
+  function filterNotes(query) {
+    const list = document.getElementById('savedNotesList');
+    list.innerHTML = '';
+    const filtered = notes.filter(n => n.title.toLowerCase().includes(query.toLowerCase()) || n.text.toLowerCase().includes(query.toLowerCase()));
+    filtered.forEach(note => {
+      const item = document.createElement('div');
+      item.className = 'saved-note-item';
+      item.innerHTML = `
+        <div class="note-title">${note.title}</div>
+        <div class="note-preview">${note.text.substring(0, 60)}...</div>
+        <div class="note-date">${note.date}</div>
+      `;
+      item.onclick = () => {
+        document.getElementById('noteArea').value = note.text;
+      };
+      list.appendChild(item);
+    });
+  }
+
+  // Photos
+  const photoColors = [
+    'linear-gradient(135deg, #ff6b6b, #ee5a24)',
+    'linear-gradient(135deg, #48dbfb, #0abde3)',
+    'linear-gradient(135deg, #feca57, #ff9f43)',
+    'linear-gradient(135deg, #55efc4, #00b894)',
+    'linear-gradient(135deg, #a29bfe, #6c5ce7)',
+    'linear-gradient(135deg, #fd79a8, #e84393)',
+    'linear-gradient(135deg, #fdcb6e, #f39c12)',
+    'linear-gradient(135deg, #74b9ff, #0984e3)',
+    'linear-gradient(135deg, #81ecec, #00cec9)',
+    'linear-gradient(135deg, #fab1a0, #e17055)',
+    'linear-gradient(135deg, #e77f67, #cf6a7)',
+    'linear-gradient(135deg, #c7ecee, #22a6b3)',
+    'linear-gradient(135deg, #ff9ff3, #f368e0)',
+    'linear-gradient(135deg, #f368e0, #ff6348)',
+    'linear-gradient(135deg, #485460, #29323c)',
+    'linear-gradient(135deg, #d9d9d9, #888888)',
+  ];
+  const photoEmojis = ['🌅', '🏔️', '🌊', '🌺', '🦋', '🌈', '🎨', '🌸', '🍀', '🌻', '🎭', '🏖️', '🌙', '⭐', '🔥', '💎'];
+
+  function loadPhotos() {
+    const grid = document.getElementById('photosGrid');
+    if (grid.children.length > 0) return;
+    for (let i = 0; i < 16; i++) {
+      const item = document.createElement('div');
+      item.className = 'photo-item';
+      const div = document.createElement('div');
+      div.style.background = photoColors[i % photoColors.length];
+      div.textContent = photoEmojis[i % photoEmojis.length];
+      item.appendChild(div);
+      item.onclick = () => openPhotoViewer(photoEmojis[i % photoEmojis.length]);
+      grid.appendChild(item);
+    }
+  }
+
+  function openPhotoViewer(emoji) {
+    document.getElementById('bigPhoto').textContent = emoji;
+    document.getElementById('photoViewer').classList.add('active');
+  }
+
+  function closePhotoViewer() {
+    document.getElementById('photoViewer').classList.remove('active');
+  }
+
+  // Music
+  const tracks = [
+    { title: 'Blinding Lights', artist: 'The Weeknd', art: '🎵' },
+    { title: 'Shape of You', artist: 'Ed Sheeran', art: '🎸' },
+    { title: 'Levitating', artist: 'Dua Lipa', art: '🪩' },
+    { title: 'Save Your Tears', artist: 'The Weeknd', art: '💫' },
+  ];
+  let currentTrack = 0;
+  let isPlaying = false;
+  let musicInterval = null;
+  let musicProgress = 35;
+
+  function togglePlay() {
+    isPlaying = !isPlaying;
+    document.getElementById('playBtn').textContent = isPlaying ? '⏸️' : '▶️';
+    if (isPlaying) {
+      musicInterval = setInterval(() => {
+        musicProgress += 0.5;
+        if (musicProgress >= 100) {
+          musicProgress = 0;
+          nextTrack();
+        }
+        document.getElementById('musicProgress').style.width = musicProgress + '%';
+        const totalSec = 200;
+        const currentSec = Math.floor(totalSec * musicProgress / 100);
+        const curMin = Math.floor(currentSec / 60);
+        const curS = currentSec % 60;
+        document.getElementById('musicCurrentTime').textContent = `${curMin}:${curS.toString().padStart(2, '0')}`;
+      }, 300);
+    } else {
+      clearInterval(musicInterval);
+    }
+  }
+
+  function nextTrack() {
+    currentTrack = (currentTrack + 1) % tracks.length;
+    updateTrack();
+  }
+
+  function prevTrack() {
+    currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+    updateTrack();
+  }
+
+  function updateTrack() {
+    const track = tracks[currentTrack];
+    document.getElementById('musicTitle').textContent = track.title;
+    document.getElementById('musicArtist').textContent = track.artist;
+    document.getElementById('musicArt').textContent = track.art;
+    musicProgress = 0;
+    document.getElementById('musicProgress').style.width = '0%';
+    document.getElementById('musicCurrentTime').textContent = '0:00';
+  }
+
+  // Safari
+  function goSafari() {
+    const url = document.getElementById('safariUrl').value;
+    const content = document.getElementById('safariContent');
+    const domains = {
+      'google.com': '<h1>🔍 Google</h1><p>Search the web with Google.</p><p>Try searching for something!</p>',
+      'youtube.com': '<h1>▶️ YouTube</h1><p>Enjoy millions of videos.</p><p>Subscribe to your favorite creators!</p>',
+      'apple.com': '<h1>🍎 Apple</h1><p>Think different. Apple creates products that blend innovative technology with elegant design.</p>',
+      'github.com': '<h1>🐙 GitHub</h1><p>Where the world builds software.</p><p>Millions of developers and communities building and identifying software.</p>',
+    };
+    const domain = url.toLowerCase().replace('www.', '').split('/')[0];
+    content.innerHTML = domains[domain] || `<h1>🌐 ${url}</h1><p>Page not found. This is a simulated browser.</p><p style="color:rgba(255,255,255,0.4); font-size:12px; margin-top:12px;">Try: apple.com, google.com, youtube.com, github.com</p>`;
+  }
+
+  // Tic-Tac-Toe
+  let tttBoard = Array(9).fill('');
+  let tttTurn = 'X';
+  let tttGameOver = false;
+
+  function resetTTT() {
+    tttBoard = Array(9).fill('');
+    tttTurn = 'X';
+    tttGameOver = false;
+    document.getElementById('tttStatus').textContent = 'Your turn (X)';
+    const board = document.getElementById('tttBoard');
+    board.innerHTML = '';
+    for (let i = 0; i < 9; i++) {
+      const cell = document.createElement('button');
+      cell.className = 'ttt-cell';
+      cell.onclick = () => tttMove(i);
+      board.appendChild(cell);
+    }
+  }
+
+  function tttMove(i) {
+    if (tttBoard[i] || tttGameOver || tttTurn !== 'X') return;
+    tttBoard[i] = 'X';
+    updateTTTBoard();
+    if (checkTTTWin()) return;
+    tttTurn = 'O';
+    document.getElementById('tttStatus').textContent = "AI's turn (O)";
+    setTimeout(aiMove, 500);
+  }
+
+  function aiMove() {
+    if (tttGameOver) return;
+    // Simple AI: try to win, block, or random
+    let move = findWinMove('O') ?? findWinMove('X') ?? null;
+    if (move === null) {
+      const empty = tttBoard.map((v, i) => v === '' ? i : -1).filter(i => i >= 0);
+      move = empty[Math.floor(Math.random() * empty.length)];
+    }
+    if (move !== null) {
+      tttBoard[move] = 'O';
+      updateTTTBoard();
+      if (checkTTTWin()) return;
+    }
+    tttTurn = 'X';
+    document.getElementById('tttStatus').textContent = 'Your turn (X)';
+  }
+
+  function findWinMove(player) {
+    const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    for (const [a,b,c] of wins) {
+      const line = [tttBoard[a], tttBoard[b], tttBoard[c]];
+      if (line.filter(v => v === player).length === 2 && line.includes('')) {
+        return [a,b,c][line.indexOf('')];
+      }
+    }
+    return null;
+  }
+
+  function checkTTTWin() {
+    const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    for (const [a,b,c] of wins) {
+      if (tttBoard[a] && tttBoard[a] === tttBoard[b] && tttBoard[a] === tttBoard[c]) {
+        tttGameOver = true;
+        document.getElementById('tttStatus').textContent = `${tttBoard[a]} wins! 🎉`;
+        return true;
+      }
+    }
+    if (!tttBoard.includes('')) {
+      tttGameOver = true;
+      document.getElementById('tttStatus').textContent = "It's a draw! 🤝";
+      return true;
+    }
+    return false;
+  }
+
+  function updateTTTBoard() {
+    const cells = document.getElementById('tttBoard').children;
+    for (let i = 0; i < 9; i++) {
+      cells[i].textContent = tttBoard[i];
+      cells[i].className = 'ttt-cell' + (tttBoard[i] === 'X' ? ' x' : tttBoard[i] === 'O' ? ' o' : '');
+    }
+  }
+
+  // Clicker Game
+  let clickScore = 0;
+  let clickMultiplier = 1;
+  let autoClicker = false;
+  let upgrades = { auto: false, double: false, mega: false };
+
+  function doClick() {
+    clickScore += clickMultiplier;
+    document.getElementById('clickScore').textContent = clickScore;
+    updateUpgrades();
+  }
+
+  function buyUpgrade(type) {
+    const costs = { auto: 50, double: 200, mega: 1000 };
+    if (clickScore >= costs[type] && !upgrades[type]) {
+      clickScore -= costs[type];
+      upgrades[type] = true;
+      document.getElementById('clickScore').textContent = clickScore;
+      if (type === 'auto') {
+        autoClicker = true;
+        setInterval(() => {
+          clickScore += clickMultiplier;
+          document.getElementById('clickScore').textContent = clickScore;
+          updateUpgrades();
+        }, 1000);
+      }
+      if (type === 'double') clickMultiplier = 2;
+      if (type === 'mega') clickMultiplier = 5;
+      updateUpgrades();
+    }
+  }
+
+  function updateUpgrades() {
+    const costs = { auto: 50, double: 200, mega: 1000 };
+    const ids = { auto: 'upgAuto', double: 'upgDouble', mega: 'upgMega' };
+    for (const [type, id] of Object.entries(ids)) {
+      const btn = document.getElementById(id);
+      btn.disabled = clickScore < costs[type] || upgrades[type];
+      if (upgrades[type]) {
+        btn.textContent = 'Owned';
+        btn.style.background = '#30d158';
       }
     }
   }
-}
 
-function drawNext() {
-  nctx.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
-  const m = SHAPES[nextType];
-
-  // Find the piece's bounding box so it renders centered.
-  let minR = m.length, maxR = -1, minC = m[0].length, maxC = -1;
-  for (let r = 0; r < m.length; r++) {
-    for (let c = 0; c < m[r].length; c++) {
-      if (!m[r][c]) continue;
-      minR = Math.min(minR, r); maxR = Math.max(maxR, r);
-      minC = Math.min(minC, c); maxC = Math.max(maxC, c);
+  // Camera
+  async function initCamera() {
+    const video = document.getElementById('cameraVideo');
+    const fallback = document.getElementById('cameraFallback');
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+      video.srcObject = stream;
+      video.style.display = 'block';
+      fallback.style.display = 'none';
+    } catch (e) {
+      video.style.display = 'none';
+      fallback.style.display = 'flex';
     }
   }
 
-  const w = (maxC - minC + 1) * NCELL;
-  const h = (maxR - minR + 1) * NCELL;
-  const ox = (nextCanvas.width - w) / 2;
-  const oy = (nextCanvas.height - h) / 2;
-
-  for (let r = minR; r <= maxR; r++) {
-    for (let c = minC; c <= maxC; c++) {
-      if (!m[r][c]) continue;
-      nctx.fillStyle = COLORS[nextType];
-      nctx.fillRect(ox + (c - minC) * NCELL, oy + (r - minR) * NCELL, NCELL, NCELL);
-      nctx.fillStyle = 'rgba(255, 255, 255, 0.18)';
-      nctx.fillRect(ox + (c - minC) * NCELL, oy + (r - minR) * NCELL, NCELL, 3);
-      nctx.fillStyle = 'rgba(0, 0, 0, 0.22)';
-      nctx.fillRect(ox + (c - minC) * NCELL, oy + (r - minR) * NCELL + NCELL - 3, NCELL, 3);
-    }
+  function takePhoto() {
+    const flash = document.getElementById('flash');
+    flash.classList.add('active');
+    setTimeout(() => flash.classList.remove('active'), 150);
   }
-}
-
-function updateHud() {
-  scoreEl.textContent = score.toLocaleString();
-  levelEl.textContent = String(level);
-  linesEl.textContent = String(lines);
-}
-
-// ---------- Overlay ----------
-function showOverlay(title, sub, withButton) {
-  overlayTitle.textContent = title;
-  overlaySub.textContent = sub;
-  restartBtn.classList.toggle('hidden', !withButton);
-  overlay.classList.remove('hidden');
-}
-
-function hideOverlay() {
-  overlay.classList.add('hidden');
-}
-
-// ---------- Main loop ----------
-function frame(time) {
-  requestAnimationFrame(frame);
-  const dt = Math.min(time - lastTime, 100); // clamp: tab switches / resume from pause
-  lastTime = time;
-
-  if (state === 'playing') {
-    dropTimer += dt;
-    while (dropTimer >= dropInterval()) {
-      dropTimer -= dropInterval();
-      gravityStep();
-    }
-  }
-  draw();
-}
-
-// ---------- Input ----------
-const HANDLED_KEYS = new Set([
-  'ArrowLeft', 'ArrowRight', 'ArrowDown', 'ArrowUp', 'Space',
-  'KeyA', 'KeyD', 'KeyS', 'KeyW', 'KeyX', 'KeyZ', 'KeyP', 'KeyR', 'Enter'
-]);
-
-document.addEventListener('keydown', (e) => {
-  const code = e.code;
-  if (HANDLED_KEYS.has(code) || code.startsWith('Control')) {
-    e.preventDefault(); // stop the page from scrolling on Space/arrows
-  }
-
-  if (code === 'KeyP' && !e.repeat) {
-    togglePause();
-    return;
-  }
-  if ((code === 'KeyR' || code === 'Enter') && state === 'gameover' && !e.repeat) {
-    resetGame();
-    return;
-  }
-  if (state !== 'playing') return;
-
-  switch (code) {
-    case 'ArrowLeft':
-    case 'KeyA':
-      move(-1);
-      break;
-    case 'ArrowRight':
-    case 'KeyD':
-      move(1);
-      break;
-    case 'ArrowDown':
-    case 'KeyS':
-      softDrop();
-      break;
-    case 'Space':
-      if (!e.repeat) hardDrop();
-      break;
-    case 'ArrowUp':
-    case 'KeyW':
-    case 'KeyX':
-      if (!e.repeat) rotate(1);
-      break;
-    case 'KeyZ':
-    case 'ControlLeft':
-    case 'ControlRight':
-      if (!e.repeat) rotate(-1);
-      break;
-  }
-});
-
-restartBtn.addEventListener('click', () => {
-  restartBtn.blur(); // so Space doesn't re-trigger the focused button later
-  if (state === 'gameover') resetGame();
-});
-
-// Auto-pause when the window loses focus.
-window.addEventListener('blur', () => {
-  if (state === 'playing') togglePause();
-});
-
-// ---------- Mobile touch controls ----------
-function initTouchControls() {
-  const controls = document.getElementById('touch-controls');
-  // Show controls on mobile viewports
-  if (window.innerWidth <= 480) controls.style.display = 'block';
-
-  const btnLeft = document.getElementById('btn-left');
-  const btnRight = document.getElementById('btn-right');
-  const btnDown = document.getElementById('btn-down');
-  const btnRotate = document.getElementById('btn-rotate');
-  const btnDrop = document.getElementById('btn-drop');
-
-  btnLeft.addEventListener('click', () => move(-1));
-  btnRight.addEventListener('click', () => move(1));
-  btnDown.addEventListener('click', softDrop);
-  btnRotate.addEventListener('click', () => rotate(1));
-  btnDrop.addEventListener('click', hardDrop);
-
-  // Prevent default touch behavior on buttons
-  [btnLeft, btnRight, btnDown, btnRotate, btnDrop].forEach(btn => {
-    btn.addEventListener('touchstart', e => e.preventDefault());
-  });
-}
-
-// Initialize controls after DOM ready
-document.addEventListener('DOMContentLoaded', initTouchControls);
-
-// ---------- Start ----------
-resetGame();
-requestAnimationFrame(frame);
-
-})();
 </script>
+
 </body>
 </html>
